@@ -8,6 +8,20 @@ local_stylesheets = ['./assets/styles.css']
 app = dash.Dash(__name__, external_stylesheets=local_stylesheets)
 
 app.layout = html.Div(children=[
+dcc.Tabs([
+        dcc.Tab(label='Tab one', children=[
+            dcc.Markdown("""hello i'm tab one"""),
+            dcc.Markdown("""![city](./assets/images/tab1.jpg)""")
+        ]),
+        dcc.Tab(label='Tab two', children=[
+            dcc.Markdown("""hello i'm tab two"""),
+            dcc.Markdown("""![country](./assets/images/tab2.jpg)""")
+        ]),
+        dcc.Tab(label='Tab three', children=[
+            dcc.Markdown("""hello i'm tab two"""),
+            dcc.Markdown("""![sad girl](./assets/images/tab3.jpg)""")
+        ]),
+    ]),
     html.H1(children=dcc.Markdown('''
 
 # This is an <h1> tag
