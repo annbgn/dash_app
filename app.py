@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+from connection_context_manager import ConnectionManager
+import mysql.connector
+
 import dash_table
 import dash
 import dash_core_components as dcc
@@ -8,62 +12,24 @@ import sqlite3
 from sqlite3 import Error
 
 
-def create_connection(db_file):
-    """ create a database connection to a SQLite database """
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
-    except Error as e:
-        print(e)
-    else:
-
-        cursor = conn.cursor()
-
-        sql_create_table = """CREATE TABLE purchases (purchase_id int, user varchar(255), price float(255, 7));"""
-        cursor.execute(sql_create_table)
-
-        conn.commit()
-    finally:
-        if conn:
-            conn.close()
-
-
-def add_purchase():
-    conn = db_connect()
-    cursor = conn.cursor()
-    sql_add = """INSERT INTO purchases (purchase_id, user, price)
-VALUES (1, "William", 100);"""
-    cursor.execute(sql_add)
-    conn.commit()
-    db_connection_close(conn)
-
-
-def db_connect():  # -> conneсtion
-    conn = None
-    try:
-        conn = sqlite3.connect(r"D:\databases_for_university\dashdb\pythonsqlite.db")
-        # import pdb;pdb.set_trace()
-        print(sqlite3.version)
-    except Error as e:
-        print(e)
-    return conn
-
-
-def db_connection_close(conn):
-    if conn:
-        conn.close()
-
-
 def get_db_data():
-    conn = db_connect()
-    cursor = conn.cursor()
-    sql_select = """SELECT * FROM purchases;"""
-    cursor.execute(sql_select)
-    result = cursor.fetchall()
-    for r in result:
-        print(r)
-    db_connection_close(conn)
+    result = {}
+    sql_select_tasks = """SELECT task_id FROM task LIMIT 5;"""
+    with ConnectionManager() as cm:
+        cm.cursor.execute(sql_select_tasks)
+        tasks_result = cm.cursor.fetchall()  # list of tuples, e.g. [(1,), (2,)]
+        for task in tasks_result:
+            sql_select_subtask = """SELECT subtask_id, text, is_done FROM subtask WHERE task_id ={} LIMIT 5;""".format(
+                task[0]
+            )
+            cm.cursor.execute(sql_select_subtask)
+            subtask_result = cm.cursor.fetchall()
+            subtask_dict = [
+                {"text": subtask[1], "is_done": subtask[2]}
+                for subtask in subtask_result
+            ]
+            result.update({task[0]: subtask_dict})
+    # print(result)
     return result
 
 
@@ -71,8 +37,8 @@ def get_db_data():
 local_stylesheets = ["./assets/styles.css"]
 app = dash.Dash(__name__, external_stylesheets=local_stylesheets)
 
-table_data = get_db_data()
-app.layout = html.Div(
+# table_data = get_db_data()
+'''app.layout = html.Div(
     children=[
         dcc.Tabs(
             [
@@ -108,6 +74,7 @@ app.layout = html.Div(
             ],
             value="NYC",
         ),
+        html.Div(id="dd-output-container"),
         dash_table.DataTable(
             id="table",
             columns=[
@@ -115,11 +82,8 @@ app.layout = html.Div(
                 {"name": "user", "id": str(2)},
                 {"name": "price", "id": str(3)},
             ],
-            data=[
-                {"purchase_id": t[0], "user": t[1], "price": t[2]} for t in table_data
-            ],
+            data=table_data,
         ),
-        html.Div(id="dd-output-container"),
         html.H1(
             children=dcc.Markdown(
                 """
@@ -161,18 +125,38 @@ app.layout = html.Div(
         ),
     ]
 )
+'''
 
+def generate_tables():
+    children = []
+    for task, subtasks_list in get_db_data().items():
+        # import pdb;pdb.set_trace()
+        children.append(
+            dash_table.DataTable(
+                id="table{}".format(str(task)),
+                columns=[{"name": "text", "id": "text"},
+                         {"name": "is_done", "id": "is_done"}
+                         ],
+                data=[
+                    {
+                        "text": subtask["text"],
+                        "is_done": "true" if subtask["is_done"] else "false",
+                    }
+                    for subtask in subtasks_list
+                ],
+            )
+        )
+    return children
+app.layout = html.Div(children=generate_tables())
 
+'''
 @app.callback(
     dash.dependencies.Output("dd-output-container", "children"),
     [dash.dependencies.Input("demo-dropdown", "value")],
 )
 def update_output(value):
     return 'You have selected "{}"'.format(value)
-
+'''
 
 if __name__ == "__main__":
-    # create_connection(r"D:\databases_for_university\dashdb\pythonsqlite.db")
-    # add_purchase()
-
     app.run_server(debug=True)
