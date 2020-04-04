@@ -6,13 +6,13 @@ DB_USER = "root"
 DB_PASSWORD = "root"
 
 
-class ConnectionManager():
+class ConnectionManager:
     def __init__(self):
         self.db_name = DB_NAME
         self.db_user = DB_USER
         self.db_password = DB_PASSWORD
         self.conn = None
-        self.cursor= None
+        self.cursor = None
 
     def __enter__(self):
         conn = mysql.connector.connect(
@@ -20,7 +20,7 @@ class ConnectionManager():
             user=DB_USER,
             passwd=DB_PASSWORD,
             database=DB_NAME,
-            auth_plugin = 'mysql_native_password'
+            auth_plugin="mysql_native_password",
         )
         self.conn = conn
         self.cursor = self.conn.cursor(buffered=True)
@@ -30,4 +30,3 @@ class ConnectionManager():
         if self.conn:
             self.conn.commit()
             self.conn.close()
-
