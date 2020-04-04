@@ -1,10 +1,7 @@
-from connection_context_manager import ConnectionManager
 import mysql.connector
 from mysql.connector.errors import ProgrammingError
 
-DB_NAME = "dashdb"
-DB_USER = "root"
-DB_PASSWORD = "root"
+from connection_context_manager import ConnectionManager, DB_NAME, DB_PASSWORD, DB_USER
 
 
 def create_db():
@@ -19,10 +16,6 @@ def create_db():
 
 
 def create_tables():
-    import pdb
-
-    pdb.set_trace()
-
     user_sql = """CREATE TABLE user (user_id integer, name varchar(255));"""
     task_sql = """CREATE TABLE task (task_id integer, user_id integer, text varchar(1024), is_done boolean, tags varchar(255), due date);"""
     subtask_sql = """CREATE TABLE subtask (subtask_id integer, task_id integer, user_id integer, text varchar(1024), is_done boolean);"""
