@@ -16,3 +16,12 @@ ul {
   list-style: square;
   text-align: left;
 }
+
+table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+td{
+    width: 50%;
+}
