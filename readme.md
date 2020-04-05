@@ -1,10 +1,10 @@
 to start this project you gotta install mysql: https://dev.mysql.com/doc/refman/8.0/en/mysql-installer-setup.html 
 
 create virtualenv, activate it, then 
-```pip install pip-tools``` and ```pip-compile --output-file=requirements\requirements.txt requirements\requirements.in```
+```pip install pip-tools``` and ```pip install -r requirements\requirements.txt```
 
 
-don't forget to replace DB_USER and DB_PASSWORD with yours in connection_context_manager.py and db_setup.py
+don't forget to replace DB_USER and DB_PASSWORD with yours in connection_context_manager.py
 
 run db_setup.py script
 
