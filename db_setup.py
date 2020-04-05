@@ -6,7 +6,7 @@ from connection_context_manager import ConnectionManager, DB_NAME, DB_PASSWORD, 
 
 def create_db():
     db = mysql.connector.connect(
-        host="localhost",
+        host="annbgn3.mysql.pythonanywhere-services.com",
         user=DB_USER,
         passwd=DB_PASSWORD,
         auth_plugin="mysql_native_password",
