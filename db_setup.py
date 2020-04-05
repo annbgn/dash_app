@@ -61,8 +61,8 @@ def db_fill_initial_data():
 
 
 if __name__ == "__main__":
-    create_db()
-    print("database {} created successfully".format(DB_NAME))
+    # create_db()
+    # print("database {} created successfully".format(DB_NAME))
 
     create_tables()
     print("tables crated successfully")
