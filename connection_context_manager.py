@@ -2,7 +2,7 @@ import mysql.connector
 
 
 DB_NAME = "dashdb"
-DB_USER = "rootroot"
+DB_USER = "annbgn3"
 DB_PASSWORD = "rootroot"
 
 
