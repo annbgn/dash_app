@@ -5,6 +5,14 @@ body {
 h1 {
   color: white;
   text-align: center;
+  font-family: "Ink Free";
+  font-size: 75px;
+  background-image: url("./images/header_bg.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 100% 100%;
+  background-color: transparent;
+  height: 250px;
 }
 
 p {
@@ -19,9 +27,15 @@ ul {
 
 table {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 td{
     width: 50%;
+}
+
+footer {
+background-color: LightSeaGreen;
+height: 15px;
 }
