@@ -6,13 +6,14 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+from dash.dependencies import Input, Output, State
 
 from connection_context_manager import ConnectionManager
 
 
 def get_db_data():
     result = {}
-    sql_select_tasks = """SELECT DISTINCT task_id FROM task LIMIT 10;"""
+    sql_select_tasks = """SELECT DISTINCT task_id, text FROM task LIMIT 10;"""
     with ConnectionManager() as cm:
         cm.cursor.execute(sql_select_tasks)
         tasks_result = cm.cursor.fetchall()  # list of tuples, e.g. [(1,), (2,)]
@@ -26,16 +27,17 @@ def get_db_data():
                 {"text": subtask[1], "is_done": subtask[2]}
                 for subtask in subtask_result
             ]
-            result.update({task[0]: subtask_dict})
+            result.update({(task[0], task[1]): subtask_dict})
     return result
 
 
 def generate_tables():
     children = []
     for task, subtasks_list in get_db_data().items():
+        children.append(html.H4(str(task[1])))
         children.append(
             dash_table.DataTable(
-                id="table{}".format(str(task)),
+                id="table{}".format(str(task[0])),
                 columns=[
                     {"name": "text", "id": "text"},
                     {"name": "is_done", "id": "is_done"},
@@ -48,6 +50,16 @@ def generate_tables():
                     for subtask in subtasks_list
                 ],
                 style_cell={"textAlign": "left"},
+                editable=True,
+                row_deletable=True,
+            ),
+        )
+        children.append(
+            html.Button(
+                "Add Row",
+                id="add_button{}".format(str(task[0])),
+                n_clicks=0,
+                className="example_d",
             )
         )
     return children
@@ -115,9 +127,28 @@ def get_md():
     return md
 
 
+def register_callbacks(app):
+    for task, subtasks_list in get_db_data().items():
+
+        @app.callback(
+            Output("table{}".format(str(task[0])), "data"),
+            [Input("add_button{}".format(str(task[0])), "n_clicks")],
+            [
+                State("table{}".format(str(task[0])), "data"),
+                State("table{}".format(str(task[0])), "columns"),
+            ],
+        )
+        def add_row(n_clicks, rows, columns):
+            if n_clicks > 0:
+                rows.append({c["id"]: "" for c in columns})
+            return rows
+
+
 if __name__ == "__main__":
     local_stylesheets = ["./assets/styles.css"]
     app = dash.Dash(__name__, external_stylesheets=local_stylesheets)
+    app.config.suppress_callback_exceptions = True
+
     app.title = "TO DO list"
     app.layout = html.Div(
         children=[
@@ -144,5 +175,7 @@ if __name__ == "__main__":
             ),
         ]
     )
+
+    register_callbacks(app)
 
     app.run_server(debug=True)
