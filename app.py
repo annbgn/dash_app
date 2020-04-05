@@ -95,22 +95,54 @@ def get_bar_chart():
         id="proportion_chart",
         figure={
             "data": [done, undone],
-            "layout": {"title": "Proportion of done and not (yet) done tasks, splitted by due date",},
+            "layout": {
+                "title": "Proportion of done and not (yet) done tasks, splitted by due date",
+            },
         },
     )
     return graph
 
 
+def get_md():
+    md = """
+### Say Hi to your new todo list manager!
+#### Features:
+
+- tasks with subtasks
+- visualize upcoming due dates
+- cool singlepage design = no redirects & loadings
+"""
+    return md
+
+
 if __name__ == "__main__":
     local_stylesheets = ["./assets/styles.css"]
     app = dash.Dash(__name__, external_stylesheets=local_stylesheets)
+    app.title = "TO DO list"
     app.layout = html.Div(
-        dcc.Tabs(
-            [
-                dcc.Tab(label="Tasks", children=generate_tables()),
-                dcc.Tab(label="Chart", children=[get_bar_chart()],),
-            ]
-        )
+        children=[
+            html.H1("Aim High", id="main_header"),
+            dcc.Markdown(get_md(), style={"color": "white", "font-size": "20px"}),
+            dcc.Tabs(
+                [
+                    dcc.Tab(label="Tasks", children=generate_tables()),
+                    dcc.Tab(label="Chart", children=[get_bar_chart()],),
+                ]
+            ),
+            html.Footer(
+                children=[
+                    html.P(
+                        "2020, Anna Bogdanova",
+                        style={
+                            "color": "Turquoise",
+                            "font-family": "Verdana",
+                            "font-size": "15px",
+                            "vertical-align": "middle",
+                        },
+                    )
+                ]
+            ),
+        ]
     )
 
     app.run_server(debug=True)
