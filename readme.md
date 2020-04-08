@@ -18,9 +18,9 @@
 
     ```python db_setup.py```
     
-   if running into errors, try removing lines 64-65 indb_setup.py
+   if running into errors, try removing lines 64-65 in db_setup.py
 
-1. now you are ready run app.py and check localhost in your browser
+1. now you are ready to run app.py and check localhost in your browser
 
     ```python app.py```
 
