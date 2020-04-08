@@ -6,7 +6,7 @@
 
 1. virtualenv
 
-    ```python3 -m venv .```
+    ```python3 -m venv .``` and ```venv\Scripts\activate```
 
 1. requirements
 
