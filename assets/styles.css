@@ -46,7 +46,7 @@ footer {
     height: 15px;
 }
 
-
+/*buttons*/
 .example_d {
     color: Pink;
     text-transform: uppercase;
@@ -65,4 +65,21 @@ footer {
     border-radius: 50px;
     border-color: Plum;
     transition: all 0.3s ease 0s;
+}
+
+/*link*/
+a:link {
+  color: white;
+}
+
+a:visited {
+  color: plum;
+}
+
+a:hover {
+  color: pink;
+}
+
+a:active {
+  color: Turquoise;
 }

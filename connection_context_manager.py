@@ -1,9 +1,9 @@
 import mysql.connector
 
-
-DB_NAME = "annbgn3$default"
-DB_USER = "annbgn3"
-DB_PASSWORD = "rootroot"
+DB_HOST = "localhost"
+DB_NAME = "dashdb"
+DB_USER = "*****"
+DB_PASSWORD = "*****"
 
 
 class ConnectionManager:
@@ -16,7 +16,7 @@ class ConnectionManager:
 
     def __enter__(self):
         conn = mysql.connector.connect(
-            host="annbgn3.mysql.pythonanywhere-services.com",
+            host=DB_HOST,
             user=DB_USER,
             passwd=DB_PASSWORD,
             database=DB_NAME,

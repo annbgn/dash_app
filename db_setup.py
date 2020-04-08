@@ -1,12 +1,18 @@
 import mysql.connector
 from mysql.connector.errors import ProgrammingError
 
-from connection_context_manager import ConnectionManager, DB_NAME, DB_PASSWORD, DB_USER
+from connection_context_manager import (
+    ConnectionManager,
+    DB_NAME,
+    DB_PASSWORD,
+    DB_USER,
+    DB_HOST,
+)
 
 
 def create_db():
     db = mysql.connector.connect(
-        host="annbgn3.mysql.pythonanywhere-services.com",
+        host=DB_HOST,
         user=DB_USER,
         passwd=DB_PASSWORD,
         auth_plugin="mysql_native_password",
@@ -29,7 +35,7 @@ def create_tables():
 
 def db_fill_initial_data():
     user_sql = """INSERT INTO user (user_id, name) VALUES (1, "Anna");"""
-    task_sql_1 = """INSERT INTO task (task_id, user_id, text, is_done, tags, due) VALUES (1, 1, "movie marathon night", FALSE, "#entertaiment #movies", "2020-05-31");"""
+    task_sql_1 = """INSERT INTO task (task_id, user_id, text, is_done, tags, due) VALUES (1, 1, "movie marathon night", FALSE, "#entertaiment #movies", "2020-04-11");"""
     task_sql_2 = """INSERT INTO task (task_id, user_id, text, is_done, tags, due) VALUES (2, 1, "cook the dinner", TRUE, "#food", CURDATE());"""
     subtask_sql_1 = """INSERT INTO subtask (subtask_id, task_id, user_id, text, is_done) VALUES (1, 1, 1, "only lovers left alive -- jim jarmush", TRUE);"""
     subtask_sql_2 = """INSERT INTO subtask (subtask_id, task_id, user_id, text, is_done) VALUES (2, 1, 1, "7 samurai -- akira kurosava", TRUE);"""
@@ -61,8 +67,8 @@ def db_fill_initial_data():
 
 
 if __name__ == "__main__":
-    # create_db()
-    # print("database {} created successfully".format(DB_NAME))
+    create_db()
+    print("database {} created successfully".format(DB_NAME))
 
     create_tables()
     print("tables crated successfully")

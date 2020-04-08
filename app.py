@@ -93,14 +93,14 @@ def get_bar_chart():
         "y": [amount[0] for amount in count_done],
         "type": "bar",
         "name": "done",
-        "marker": {"color": "palegreen"},
+        "marker": {"color": "MediumAquamarine"},
     }
     undone = {
         "x": [day.strftime("%a, %d %b %Y") for day in upcoming_week],
         "y": [amount[0] for amount in count_undone],
         "type": "bar",
         "name": "undone",
-        "marker": {"color": "lightcoral"},
+        "marker": {"color": "PaleVioletRed"},
     }
 
     graph = dcc.Graph(
@@ -123,6 +123,7 @@ def get_md():
 - tasks with subtasks
 - visualize upcoming due dates
 - cool singlepage design = no redirects & loadings
+- it's an open source studying project ([github](https://github.com/annbgn/dash_app))
 """
     return md
 
@@ -143,6 +144,49 @@ def register_callbacks(app):
                 rows.append({c["id"]: "" for c in columns})
             return rows
 
+    @app.callback(
+        dash.dependencies.Output("dd-output-container", "children"),
+        [dash.dependencies.Input("demo-dropdown", "value")],
+    )
+    def update_output(value):
+        return 'You have selected "{}"'.format(value)
+
+    @app.callback(
+        Output("textarea-example-output", "children"),
+        [Input("textarea-example", "value")],
+    )
+    def update_output(value):
+        return "You have entered: \n{}".format(value)
+
+
+def get_optional_elements():
+    style = {"color": "white", "font-family": "verdana", "font-size": "20px"}
+    children = []
+    children += [
+        html.P("How did you like the site?", style=style),
+        dcc.Dropdown(
+            id="demo-dropdown",
+            options=[
+                {"label": "great", "value": "great"},
+                {"label": "gorgeous", "value": "gorgeous"},
+                {"label": "magnificent", "value": "magnificent"},
+            ],
+            value="",
+        ),
+        html.Div(id="dd-output-container"),
+    ]
+    children += [
+        html.P("Leave a comment if you like", style=style),
+        dcc.Textarea(
+            id="textarea-example",
+            value="Feedback\nmakes us being better",
+            style={"width": "100%", "height": 300},
+        ),
+        html.Div(id="textarea-example-output", style={"whiteSpace": "pre-line"}),
+    ]
+
+    return children
+
 
 if __name__ == "__main__":
     local_stylesheets = ["./assets/styles.css"]
@@ -160,6 +204,7 @@ if __name__ == "__main__":
                     dcc.Tab(label="Chart", children=[get_bar_chart()],),
                 ]
             ),
+            html.Div(children=get_optional_elements()),
             html.Footer(
                 children=[
                     html.P(
