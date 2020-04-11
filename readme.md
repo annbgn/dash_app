@@ -2,9 +2,7 @@
 
     remember database name, username and password
 
-1. clone this project via [http](https://github.com/annbgn/dash_app.git) or [ssh](git@github.com:annbgn/dash_app.git) 
-    
-    and navigate to it ```cd dash_app```
+1. clone this project via [http](https://github.com/annbgn/dash_app.git) or [ssh](git@github.com:annbgn/dash_app.git) and navigate to it ```cd dash_app```
 
 1. virtualenv
 
